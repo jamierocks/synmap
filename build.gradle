@@ -1,0 +1,37 @@
+plugins {
+    id 'groovy'
+
+    id 'eclipse'
+    id 'idea'
+
+    id 'com.github.hierynomus.license' version '0.11.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = 'uk.jamierocks'
+version = '1.2-SNAPSHOT'
+description = 'An implementation of Dynmap for Sponge.'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+license {
+    header file('HEADER.txt')
+    include '**/*.java'
+    include '**/*.groovy'
+
+    strictCheck true
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+}
