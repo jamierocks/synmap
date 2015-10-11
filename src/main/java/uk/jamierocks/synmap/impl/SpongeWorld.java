@@ -23,94 +23,86 @@
  */
 package uk.jamierocks.synmap.impl;
 
+import org.dynmap.DynmapChunk;
 import org.dynmap.DynmapLocation;
-import org.dynmap.common.DynmapPlayer;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Texts;
+import org.dynmap.DynmapWorld;
+import org.dynmap.utils.MapChunkCache;
+import org.spongepowered.api.world.DimensionTypes;
+import org.spongepowered.api.world.World;
 
-import java.net.InetSocketAddress;
+import java.util.List;
 
-public class SpongePlayer extends SpongeCommandSender implements DynmapPlayer {
+public class SpongeWorld extends DynmapWorld {
 
-    private final Player player;
+    private final World world;
 
-    public SpongePlayer(Player player) {
-        super(player);
-        this.player = player;
+    protected SpongeWorld(World world) {
+        super(world.getName(), 0, 0);
+        this.world = world;
     }
 
     @Override
-    public String getName() {
-        return this.player.getName();
+    public boolean isNether() {
+        return this.world.getDimension().getType().equals(DimensionTypes.NETHER);
     }
 
     @Override
-    public String getDisplayName() {
-        return Texts.toPlain(this.player.getDisplayNameData().displayName().get());
+    public DynmapLocation getSpawnLocation() {
+        return new SpongeLocation(this.world.getSpawnLocation());
     }
 
     @Override
-    public boolean isOnline() {
-        return this.player.isOnline();
+    public long getTime() {
+        return this.world.getProperties().getWorldTime();
     }
 
     @Override
-    public DynmapLocation getLocation() {
-        return new SpongeLocation(this.player.getLocation());
-    }
-
-    @Override
-    public String getWorld() {
-        return this.player.getLocation().getExtent().getName();
-    }
-
-    @Override
-    public InetSocketAddress getAddress() {
-        return this.player.getConnection().getAddress();
-    }
-
-    @Override
-    public boolean isSneaking() {
+    public boolean hasStorm() {
         return false;
     }
 
     @Override
-    public int getHealth() {
-        return this.player.getHealthData().health().get().intValue();
+    public boolean isThundering() {
+        return false;
     }
 
     @Override
-    public int getArmorPoints() {
+    public boolean isLoaded() {
+        return false;
+    }
+
+    @Override
+    public void setWorldUnloaded() {
+
+    }
+
+    @Override
+    public int getLightLevel(int x, int y, int z) {
         return 0;
     }
 
     @Override
-    public DynmapLocation getBedSpawnLocation() {
+    public int getHighestBlockYAt(int x, int z) {
+        return 0;
+    }
+
+    @Override
+    public boolean canGetSkyLightLevel() {
+        return this.world.getDimension().hasSky();
+    }
+
+    @Override
+    public int getSkyLightLevel(int x, int y, int z) {
+        return 0;
+    }
+
+    @Override
+    public String getEnvironment() {
         return null;
     }
 
     @Override
-    public long getLastLoginTime() {
-        return this.player.getJoinData().lastPlayed().get().getTime();
-    }
-
-    @Override
-    public long getFirstLoginTime() {
-        return this.player.getJoinData().firstPlayed().get().getTime();
-    }
-
-    @Override
-    public boolean isInvisible() {
-        return false;
-    }
-
-    @Override
-    public int getSortWeight() {
-        return 0;
-    }
-
-    @Override
-    public void setSortWeight(int wt) {
-
+    public MapChunkCache getChunkCache(List<DynmapChunk> chunks) {
+        return null;
     }
 }
